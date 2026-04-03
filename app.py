@@ -20,9 +20,18 @@ st.info(
     "and generates a diagnostic risk summary using a lightweight multi-agent workflow."
 )
 
+st.sidebar.title("Project Summary")
+st.sidebar.write("Domain: Healthcare & Accessibility")
+st.sidebar.write("Problem Code: HC01")
+st.sidebar.write("Focus: ICU Complication Detection")
+st.sidebar.write("Core Modules:")
+st.sidebar.write("- Temporal Reasoning")
+st.sidebar.write("- Outlier Detection")
+st.sidebar.write("- Medical RAG")
+st.sidebar.write("- Multi-Agent Synthesis")
+
 # Load patient data
 df = pd.read_csv("data/patient.csv")
-
 # Section 1: Patient Snapshot
 st.header("1. Patient Snapshot")
 st.dataframe(df, use_container_width=True)

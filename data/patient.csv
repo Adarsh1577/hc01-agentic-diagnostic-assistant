@@ -1,0 +1,5 @@
+time,heart_rate,bp_systolic,bp_diastolic,temp_f,wbc,lactate,creatinine,spo2,note
+08:00,92,120,80,98.9,10.5,1.2,0.9,98,"Patient alert, mild fatigue."
+12:00,104,110,72,100.3,13.8,1.9,1.1,96,"Fever noted, possible infection."
+16:00,116,98,66,101.4,15.6,2.7,1.4,94,"Increased respiratory effort, hypotension emerging."
+20:00,126,88,58,102.1,18.4,3.3,1.8,92,"Altered mental status, concern for sepsis progression."

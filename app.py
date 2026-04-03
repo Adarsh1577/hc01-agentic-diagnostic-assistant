@@ -15,6 +15,11 @@ st.set_page_config(page_title="HC01 Diagnostic Risk Assistant", layout="wide")
 st.title("HC01 - Agentic Diagnostic Risk Assistant")
 st.subheader("ICU Complication Detection using Temporal Reasoning + Medical RAG")
 
+st.info(
+    "This prototype analyzes ICU patient trends over time, retrieves relevant clinical guidance, "
+    "and generates a diagnostic risk summary using a lightweight multi-agent workflow."
+)
+
 # Load patient data
 df = pd.read_csv("data/patient.csv")
 
@@ -49,6 +54,7 @@ else:
 # Section 5: Guideline Retrieval
 st.header("5. Guideline RAG Evidence")
 query = "lactate hypotension sepsis creatinine"
+st.caption(f"Guideline retrieval query used: {query}")
 rag_results = guideline_rag_agent(query)
 
 for item in rag_results:
@@ -73,7 +79,12 @@ final_report = chief_synthesis_agent(
     outlier_result
 )
 
-st.write(f"**Risk Level:** {final_report['risk_level']}")
+if final_report["risk_level"] == "HIGH":
+    st.error(f"Risk Level: {final_report['risk_level']}")
+elif final_report["risk_level"] == "MEDIUM":
+    st.warning(f"Risk Level: {final_report['risk_level']}")
+else:
+    st.success(f"Risk Level: {final_report['risk_level']}")
 
 st.subheader("Risk Signals")
 for signal in final_report["signals"]:

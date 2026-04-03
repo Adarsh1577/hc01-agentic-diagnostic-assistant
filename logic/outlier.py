@@ -8,13 +8,11 @@ def detect_lactate_outlier(values):
     avg_previous = sum(previous_three) / 3
     spread = max(previous_three) - min(previous_three)
 
-    # Check if previous values are relatively consistent
-    if spread <= 0.5:
-        if latest_value > avg_previous * 1.8:
-            return True, (
-                f"Latest lactate value {latest_value} strongly contradicts the prior "
-                f"three consistent readings {previous_three}. Probable lab anomaly; "
-                f"recommend redraw confirmation before altering diagnosis."
-            )
+    if spread <= 0.5 and latest_value > avg_previous * 1.8:
+        return True, (
+            f"Latest lactate value {latest_value} strongly contradicts the prior "
+            f"three consistent readings {previous_three}. Probable mislabeled result; "
+            f"diagnosis revision should be held until redraw confirmation."
+        )
 
     return False, "No statistically suspicious lactate anomaly detected."

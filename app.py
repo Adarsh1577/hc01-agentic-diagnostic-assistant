@@ -53,7 +53,10 @@ else:
 
 # Section 5: Guideline Retrieval
 st.header("5. Guideline RAG Evidence")
-query = "lactate hypotension sepsis creatinine"
+query = st.text_input(
+    "Enter guideline retrieval query",
+    value="lactate hypotension sepsis creatinine"
+)
 st.caption(f"Guideline retrieval query used: {query}")
 rag_results = guideline_rag_agent(query)
 
@@ -96,3 +99,19 @@ for item in final_report["guidelines"]:
 
 st.subheader("Safety Disclaimer")
 st.warning(final_report["note"])
+
+st.header("8. System Architecture")
+
+st.code("""
+Patient CSV + Clinical Notes
+        ↓
+Timeline Builder + Outlier Detector
+        ↓
+Note Parser Agent + Temporal Lab Mapper Agent
+        ↓
+Guideline RAG Agent
+        ↓
+Chief Synthesis Agent
+        ↓
+Final Diagnostic Risk Report
+""")

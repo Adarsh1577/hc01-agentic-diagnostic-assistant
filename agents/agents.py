@@ -2,17 +2,17 @@ from rag.retrieve import retrieve_guidelines
 
 # Extract warning signals from the latest clinical note
 def note_parser_agent(df):
-    latest = df["note"].iloc[-1].lower()
+    all_notes = " ".join(df["note"].astype(str)).lower()
     signals = []
 
-    if "fever" in latest:
-        signals.append("Fever present")
-    if "infection" in latest:
-        signals.append("Possible infection")
-    if "hypotension" in latest:
-        signals.append("Hypotension risk")
-    if "mental" in latest:
-        signals.append("Altered mental state")
+    if "fever" in all_notes:
+        signals.append("Fever present in notes")
+    if "infection" in all_notes:
+        signals.append("Possible infection mentioned")
+    if "hypotension" in all_notes:
+        signals.append("Hypotension risk mentioned")
+    if "mental" in all_notes:
+        signals.append("Altered mental state mentioned")
 
     return signals
 

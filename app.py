@@ -15,6 +15,27 @@ from agents.agents import (
 
 st.set_page_config(page_title="HC01 Diagnostic Risk Assistant", layout="wide")
 
+st.markdown("""
+<style>
+.main {
+    padding-top: 1rem;
+}
+div[data-testid="stMetric"] {
+    background-color: #111827;
+    border: 1px solid #374151;
+    padding: 12px;
+    border-radius: 12px;
+}
+div[data-testid="stMetricLabel"] {
+    font-size: 16px;
+}
+div[data-testid="stMetricValue"] {
+    font-size: 24px;
+    font-weight: 700;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.title("HC01 - Agentic Diagnostic Risk Assistant")
 st.subheader("ICU Complication Detection using Temporal Reasoning + Medical RAG")
 
@@ -135,41 +156,31 @@ family_summary = family_communication_agent(df, final_report)
 tab1, tab2 = st.tabs(["Clinical Dashboard", "Family Communication"])
 
 with tab1:
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric("Risk Level", final_report["risk_level"])
+
+    with col2:
+        st.metric("Signals Detected", len(final_report["signals"]))
+
+    with col3:
+        st.metric("Outlier Flag", "Yes" if final_report["outlier_flag"] else "No")
+
+    with col4:
+        st.metric("Guidelines Retrieved", len(final_report["guidelines"]))
+
+    st.divider()
     st.header("1. Patient Snapshot")
     st.dataframe(df, width="stretch")
 
+    st.divider()
     st.header("2. Chronological ICU Timeline")
     for item in timeline:
         st.write("- " + item)
 
-    st.header("3. Note Parser Agent Output")
-    if note_signals:
-        for signal in note_signals:
-            st.write("- " + signal)
-    else:
-        st.write("No significant note-based warning signals found.")
-
-    st.header("4. Temporal Lab Mapper Agent Output")
-    if lab_trends:
-        for trend in lab_trends:
-            st.write("- " + trend)
-    else:
-        st.write("No significant temporal lab trends found.")
-
-    st.header("5. Guideline RAG Evidence")
-    st.caption(f"Guideline retrieval query used: {query}")
-
-    for item in rag_results:
-        st.markdown(f"**Source:** {item['source']}")
-        st.markdown(f"**Score:** {item['score']}")
-        st.write(item["content"])
-        st.markdown("---")
-
-    st.header("6. Outlier Detection")
-    st.write(f"Outlier Flag: {outlier_result[0]}")
-    st.write(f"Message: {outlier_result[1]}")
-
-    st.header("7. Final Diagnostic Risk Report")
+    st.divider()
+    st.header("3. Final Diagnostic Risk Report")
 
     if final_report["risk_level"] == "HIGH":
         st.error(f"Risk Level: {final_report['risk_level']}")
@@ -192,6 +203,34 @@ with tab1:
     st.subheader("Safety Disclaimer")
     st.warning(final_report["note"])
 
+    st.header("4. Note Parser Agent Output")
+    if note_signals:
+        for signal in note_signals:
+            st.write("- " + signal)
+    else:
+        st.write("No significant note-based warning signals found.")
+
+    st.header("5. Temporal Lab Mapper Agent Output")
+    if lab_trends:
+        for trend in lab_trends:
+            st.write("- " + trend)
+    else:
+        st.write("No significant temporal lab trends found.")
+
+    st.header("6. Guideline RAG Evidence")
+    st.caption(f"Guideline retrieval query used: {query}")
+
+    for item in rag_results:
+        st.markdown(f"**Source:** {item['source']}")
+        st.markdown(f"**Score:** {item['score']}")
+        st.write(item["content"])
+        st.markdown("---")
+
+    st.header("7. Outlier Detection")
+    st.write(f"Outlier Flag: {outlier_result[0]}")
+    st.write(f"Message: {outlier_result[1]}")
+
+    st.divider()
     st.subheader("Why this result?")
     st.write(
         "The system generated this risk level by combining note-based signals, "
@@ -205,6 +244,7 @@ with tab1:
         "early sepsis progression or organ dysfunction."
     )
 
+    st.divider()
     st.header("8. System Architecture")
     st.code("""
 Patient CSV / Manual Input + Clinical Notes
@@ -228,11 +268,12 @@ Diagnostic Risk Report
     st.write("- Improve note understanding using advanced clinical NLP models")
 
 with tab2:
+    st.divider()
     st.header("Family Communication Summary")
     st.info("This section explains the patient's condition in a more compassionate and non-technical way.")
 
     st.subheader("English")
-    st.write(family_summary["english"])
+    st.success(family_summary["english"])
 
     st.subheader("Hindi")
-    st.write(family_summary["regional"])
+    st.info(family_summary["regional"])

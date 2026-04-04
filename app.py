@@ -252,6 +252,16 @@ Chief Synthesis Agent
 Diagnostic Risk Report
 """)
 
+    st.image("architecture.jpeg", use_column_width=True)
+
+    st.header("Workflow Diagram")
+
+    st.image("workflow.jpeg", use_column_width=True)
+
+    st.info("This architecture shows our multi-agent system where each agent handles a specialized clinical reasoning task, coordinated through an orchestrator to generate an explainable diagnostic report.")
+
+    st.markdown("---")
+
     st.header("9. Future Upgrade Path")
     st.write("- Current MVP includes a local orchestration layer, vector-style retrieval, and MIMIC-compatible demo input")
     st.write("- Integrate real ICU datasets such as MIMIC-III or MIMIC-IV demo records")

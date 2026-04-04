@@ -272,8 +272,13 @@ with tab2:
     st.header("Family Communication Summary")
     st.info("This section explains the patient's condition in a more compassionate and non-technical way.")
 
-    st.subheader("English")
-    st.success(family_summary["english"])
+    selected_language = st.selectbox(
+        "Select family communication language",
+        ["English", "Hindi", "Marathi", "Tamil", "Telugu"]
+    )
+
+    st.subheader(selected_language)
+    st.success(family_summary[selected_language])
 
     st.subheader("Hindi")
     st.info(family_summary["regional"])

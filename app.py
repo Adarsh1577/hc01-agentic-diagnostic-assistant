@@ -238,31 +238,12 @@ with tab1:
 
     st.divider()
     st.header("8. System Architecture")
-    st.code("""
-Patient CSV / Manual Input + Clinical Notes
-        ↓
-Timeline Builder + Outlier Detector
-        ↓
-Note Parser Agent + Temporal Lab Mapper Agent
-        ↓
-Guideline RAG Agent
-        ↓
-Chief Synthesis Agent
-        ↓
-Diagnostic Risk Report
-""")
+    st.image("architecture.png", width="stretch")
 
-    st.image("architecture.jpeg", use_column_width=True)
+    st.header("9. Workflow Diagram")
+    st.image("workflow.png", width="stretch")
 
-    st.header("Workflow Diagram")
-
-    st.image("workflow.jpeg", use_column_width=True)
-
-    st.info("This architecture shows our multi-agent system where each agent handles a specialized clinical reasoning task, coordinated through an orchestrator to generate an explainable diagnostic report.")
-
-    st.markdown("---")
-
-    st.header("9. Future Upgrade Path")
+    st.header("10. Future Upgrade Path")
     st.write("- Current MVP includes a local orchestration layer, vector-style retrieval, and MIMIC-compatible demo input")
     st.write("- Integrate real ICU datasets such as MIMIC-III or MIMIC-IV demo records")
     st.write("- Replace keyword retrieval with vector database based semantic retrieval")

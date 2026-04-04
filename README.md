@@ -34,7 +34,12 @@ We built a multi-agent clinical decision-support prototype that:
 - Explainability through result interpretation and architecture
 
 ## Dataset
-Current version uses simulated ICU patient trajectories, including an explicit outlier test case.
+Current version uses simulated ICU patient trajectories in the `data/` folder:
+- `data/patient.csv`
+- `data/patient_case_2.csv`
+- `data/patient_outlier_case.csv`
+
+The outlier dataset explicitly demonstrates three prior consistent lactate readings followed by a contradictory value, which triggers held diagnosis behavior until redraw confirmation.
 
 Future scope:
 - Integrate MIMIC-III / MIMIC-IV demo ICU records

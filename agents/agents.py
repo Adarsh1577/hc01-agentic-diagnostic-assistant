@@ -83,38 +83,38 @@ def family_communication_agent(df, final_report):
     outlier_flag = final_report["outlier_flag"]
 
     english_summary = (
-        f"Over the last 12 hours, the patient has shown changes in temperature, blood pressure, "
-        f"heart rate, and blood test results that suggest the medical team should watch the patient closely. "
-        f"The current system assessment is {risk} risk. "
+        "Over the last 12 hours, the patient's condition has changed and the care team is watching it closely. "
+        f"The system currently assesses this as {risk} risk. "
     )
 
     if risk == "HIGH":
-        english_summary += "This means the patient may be getting sicker and needs close monitoring. "
+        english_summary += "This means the team is concerned and is treating the case with extra care. "
     elif risk == "MEDIUM":
-        english_summary += "This means there are some warning signs but not the most severe level. "
+        english_summary += "This means there are some warning signs, but it is not the most serious level yet. "
     else:
         english_summary += "This means the patient appears relatively stable right now. "
 
     if outlier_flag:
-        english_summary += "A recent lab result looks inconsistent, so doctors may confirm it before making decisions."
+        english_summary += "One recent test value looks inconsistent with the previous trend, so the team wants a redraw before changing the diagnosis."
     else:
-        english_summary += "Current trends appear consistent for monitoring."
+        english_summary += "The latest measurements fit with the earlier pattern."
 
     hindi_summary = (
-        f"पिछले 12 घंटों में मरीज की स्थिति में बदलाव देखे गए हैं। जोखिम स्तर {risk} है। "
+        "पिछले 12 घंटों में मरीज की स्थिति में बदलाव हुआ है और टीम इसे ध्यान से देख रही है। "
+        f"सिस्टम इस समय इसे {risk} जोखिम मानता है। "
     )
 
     if risk == "HIGH":
-        hindi_summary += "स्थिति गंभीर हो सकती है, इसलिए ICU टीम को ध्यान देना होगा। "
+        hindi_summary += "इसका मतलब है कि टीम चिंतित है और विशेष सावधानी बरत रही है। "
     elif risk == "MEDIUM":
-        hindi_summary += "कुछ चेतावनी संकेत हैं लेकिन स्थिति अत्यधिक गंभीर नहीं है। "
+        hindi_summary += "इसका मतलब है कि कुछ चेतावनी संकेत हैं, लेकिन यह सबसे गंभीर स्तर नहीं है। "
     else:
-        hindi_summary += "मरीज अभी स्थिर दिख रहा है। "
+        hindi_summary += "इसका मतलब है कि मरीज अभी अपेक्षाकृत स्थिर दिखता है। "
 
     if outlier_flag:
-        hindi_summary += "एक लैब रिपोर्ट असामान्य लग रही है, इसलिए दोबारा जांच की आवश्यकता हो सकती है।"
+        hindi_summary += "एक हाल का परीक्षण परिणाम पहले के पैटर्न से मेल नहीं खा रहा है, इसलिए टीम फिर से जांच करना चाहती है।"
     else:
-        hindi_summary += "रुझान अभी स्थिर हैं।"
+        hindi_summary += "ताज़ा परीक्षण पहले के रुझान से मेल खाता है।"
 
     translations = {
         "English": english_summary,

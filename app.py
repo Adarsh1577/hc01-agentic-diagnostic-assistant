@@ -280,5 +280,3 @@ with tab2:
     st.subheader(selected_language)
     st.success(family_summary[selected_language])
 
-    st.subheader("Hindi")
-    st.info(family_summary["regional"])

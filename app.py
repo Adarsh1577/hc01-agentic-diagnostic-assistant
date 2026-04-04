@@ -5,13 +5,7 @@ from io import StringIO
 from logic.timeline import build_timeline
 from logic.outlier import detect_lactate_outlier
 
-from agents.agents import (
-    note_parser_agent,
-    temporal_lab_mapper_agent,
-    guideline_rag_agent,
-    chief_synthesis_agent,
-    family_communication_agent
-)
+from agents.agents import DiagnosticOrchestrator
 
 st.set_page_config(page_title="HC01 Diagnostic Risk Assistant", layout="wide")
 
@@ -54,6 +48,8 @@ st.sidebar.write("- Outlier Detection")
 st.sidebar.write("- Medical RAG")
 st.sidebar.write("- Multi-Agent Synthesis")
 st.sidebar.write("- Family Communication Output")
+
+orchestrator = DiagnosticOrchestrator()
 
 # -----------------------------
 # INPUT MODE
@@ -105,7 +101,7 @@ def get_manual_dataframe():
 if input_mode == "Preloaded Patient Case":
     patient_file = st.selectbox(
         "Select patient case",
-        ["data/patient.csv", "data/patient_case_2.csv", "data/patient_outlier_case.csv"]
+        ["data/patient.csv", "data/patient_case_2.csv", "data/patient_outlier_case.csv", "data/mimic_demo.csv"]
     )
     df = pd.read_csv(patient_file)
     timeline = build_timeline(patient_file)
@@ -137,18 +133,14 @@ query = st.text_input(
     value="lactate hypotension sepsis creatinine"
 )
 
-note_signals = note_parser_agent(df)
-lab_trends = temporal_lab_mapper_agent(df)
-rag_results = guideline_rag_agent(query)
-lactate_values = df["lactate"].tolist()
-outlier_result = detect_lactate_outlier(lactate_values)
-final_report = chief_synthesis_agent(
-    note_signals,
-    lab_trends,
-    rag_results,
-    outlier_result
-)
-family_summary = family_communication_agent(df, final_report)
+pipeline_output = orchestrator.run_pipeline(df, query)
+
+note_signals = pipeline_output["note_signals"]
+lab_trends = pipeline_output["lab_trends"]
+rag_results = pipeline_output["rag_results"]
+outlier_result = pipeline_output["outlier_result"]
+final_report = pipeline_output["final_report"]
+family_summary = pipeline_output["family_summary"]
 
 # -----------------------------
 # TABS
@@ -261,6 +253,7 @@ Diagnostic Risk Report
 """)
 
     st.header("9. Future Upgrade Path")
+    st.write("- Current MVP includes a local orchestration layer, vector-style retrieval, and MIMIC-compatible demo input")
     st.write("- Integrate real ICU datasets such as MIMIC-III or MIMIC-IV demo records")
     st.write("- Replace keyword retrieval with vector database based semantic retrieval")
     st.write("- Upgrade agents to LLM-based orchestration")

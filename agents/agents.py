@@ -2,7 +2,7 @@ from rag.retrieve import retrieve_guidelines
 
 # Extract warning signals from the latest clinical note
 def note_parser_agent(df):
-    all_notes = " ".join(df["note"].astype(str)).lower()
+    all_notes = " ".join(df["note"].fillna("").map(str).tolist()).lower()
     signals = []
 
     if "fever" in all_notes:
@@ -167,3 +167,46 @@ def family_communication_agent(df, final_report):
     }
 
     return translations
+
+
+from logic.outlier import detect_lactate_outlier
+
+
+class DiagnosticOrchestrator:
+    def __init__(self):
+        self.agent_registry = {
+            "note_parser": note_parser_agent,
+            "temporal_lab_mapper": temporal_lab_mapper_agent,
+            "guideline_rag": guideline_rag_agent,
+            "chief_synthesis": chief_synthesis_agent,
+            "family_communication": family_communication_agent,
+        }
+
+    def run_pipeline(self, df, query):
+        note_signals = self.agent_registry["note_parser"](df)
+        lab_trends = self.agent_registry["temporal_lab_mapper"](df)
+        rag_results = self.agent_registry["guideline_rag"](query)
+
+        lactate_values = df["lactate"].tolist()
+        outlier_result = detect_lactate_outlier(lactate_values)
+
+        final_report = self.agent_registry["chief_synthesis"](
+            note_signals,
+            lab_trends,
+            rag_results,
+            outlier_result
+        )
+
+        family_summary = self.agent_registry["family_communication"](
+            df,
+            final_report
+        )
+
+        return {
+            "note_signals": note_signals,
+            "lab_trends": lab_trends,
+            "rag_results": rag_results,
+            "outlier_result": outlier_result,
+            "final_report": final_report,
+            "family_summary": family_summary
+        }
